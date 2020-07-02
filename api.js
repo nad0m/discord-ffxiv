@@ -6,16 +6,16 @@ const fetch = require('node-fetch')
 const { compareList } = require('./util')
 
 const getFCMemberIds = async () => {
-    //find the FC with its name and server
+  //find the FC with its name and server
+  try {
     let res = await xiv.freecompany.search('Crystal Thorn', { server })
-
-    //get the FC ID
     let id = res.Results[0].ID
-  
-    //get and return fc members
-    let fc = await xiv.freecompany.get(id, {data: 'FCM'})
+    let fc = await xiv.freecompany.get(id, { data: 'FCM' })
     const promises = fc.FreeCompanyMembers.map(member => getMemberClassJobs(member))
     return promises
+  } catch(e) {
+    return false
+  }
 }
 
 const getMemberClassJobs = async ({ ID }) => {
@@ -26,7 +26,7 @@ const getMemberClassJobs = async ({ ID }) => {
 
 const processClassJobs = ClassJobs => {
   return ClassJobs.reduce((acc, { UnlockedState: { Name } = {}, Level }) => {
-    return { 
+    return {
       ...acc,
       [Name]: Level
     }
@@ -34,7 +34,15 @@ const processClassJobs = ClassJobs => {
 }
 
 const getDataFromXIV = async () => {
-  const promises = await getFCMemberIds()
+  let promises = await getFCMemberIds()
+
+  while (!promises) {
+    console.log("retrying..")
+    promises = await getFCMemberIds()
+  }
+
+  console.log("success")
+
   const members = await Promise.all(promises)
   const processedMembers = members.reduce((acc, { Character: { ID, Name, ClassJobs = [] } = {} }) => {
     return {
@@ -45,14 +53,14 @@ const getDataFromXIV = async () => {
       }
     }
   }, {})
-  
+
   return processedMembers
 }
 
 const getDataFromDB = async () => {
   const response = await fetch(process.env.DB, {
     method: 'get',
-    headers: {'secret-key': process.env.API_KEY}
+    headers: { 'secret-key': process.env.API_KEY }
   });
   const json = await response.json();
 
@@ -60,15 +68,15 @@ const getDataFromDB = async () => {
 }
 
 const putDataToDB = async body => {
-	const response = await fetch(process.env.DB, {
-		method: 'put',
-		body: JSON.stringify(body),
-		headers: {
-      'Content-Type':	'application/json',
+  const response = await fetch(process.env.DB, {
+    method: 'put',
+    body: JSON.stringify(body),
+    headers: {
+      'Content-Type': 'application/json',
       'secret-key': process.env.API_KEY,
       'versioning': 'false'
     }
-	});
+  });
   const json = await response.json();
   console.log(json)
 }

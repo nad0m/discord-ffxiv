@@ -3,6 +3,7 @@ const { getStatus } = require('./api')
 const Discord = require("discord.js")
 const client = new Discord.Client()
 const { getEmbed } = require('./embed')
+const { runSchedule } = require('./util')
 
 client.login(process.env.BOT_TOKEN);
 
@@ -11,115 +12,29 @@ client.on("ready", () => {
   client.user.setActivity("with Doctor Doctor", {
     type: "PLAYING"
   });
+
+  const onSchedule = () => {
+    const channel = client.channels.cache.get('712206529981579355')
+    onDataFinish = result => {
+      channel.send({ embed: getEmbed(result) })
+    }
+    getStatus(onDataFinish)
+  }
+  runSchedule(onSchedule)
 })
 
 client.on("message", msg => {
   const channel = client.channels.cache.get(msg.channel.id)
-  
+  const memberJoin = msg.type === "GUILD_MEMBER_JOIN";
+
   if (msg.content === "!thorn status") {
     const cb = result => {
       channel.send({ embed: getEmbed(result) })
     }
     getStatus(cb)
   }
+
+  if (memberJoin) {
+    channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
+  }
 })
-
-
-/**
- const exampleEmbed = {
-    color: 0x0099ff,
-    title: 'Progress Report',
-    thumbnail: {
-      url: 'https://img2.finalfantasyxiv.com/c/S05_bf25a86aaf6f6329f19606513073ddb2_07_64x64.png',
-    },
-    fields: [
-      {
-        name: '-----------------------',
-        value: '[Doctor Doctor]',
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: '-----------------------',
-        value: '[Doctor Doctor]',
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: 'Dragoon',
-        value: '34 (+2)',
-        inline: true,
-      },
-      {
-        name: '-----------------------',
-        value: '\u200b',
-      }
-    ],
-    timestamp: new Date(),
-    footer: {
-      text: 'Reach out to Doctor Doctor for more info about this bot',
-      icon_url: 'https://i.imgur.com/wSTFkRM.png',
-    },
-  };
- */

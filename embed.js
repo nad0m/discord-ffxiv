@@ -8,7 +8,7 @@ const getEmbed = fields => {
     timestamp: new Date(),
     footer: {
       text: 'Reach out to Doctor Doctor for more info about this bot',
-      icon_url: 'https://i.imgur.com/wSTFkRM.png',
+      icon_url: 'https://avatars2.githubusercontent.com/u/20848851?s=60&v=4',
     },
     fields
   }

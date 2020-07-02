@@ -1,3 +1,5 @@
+const schedule = require('node-schedule')
+
 const compareJobLevel = (prev = null, current = null) => {
   if (!prev || current.Level - prev.Level === 0) {
     return null
@@ -5,11 +7,7 @@ const compareJobLevel = (prev = null, current = null) => {
 
   const diff = current.Level - prev.Level
 
-  return {
-    name: current.Name,
-    value: `${current.Level} (+${diff})`,
-    inline: true
-  }
+  return `${current.Name}: ${prev.Level} -> ${current.Level} (+${diff})`
 }
 
 const compareCharacter = (prev = null, current = null) => {
@@ -19,7 +17,11 @@ const compareCharacter = (prev = null, current = null) => {
   const { ClassJobs: prevClassJobs = {} } = prev
   const { Name, ClassJobs: currClassJobs } = current
 
-  const stringBuilder = [{ name: `-----------------------\n>>> ${Name}`, value: '\u200b' }]
+  const field = {
+    name: `>>> ${Name}`
+  }
+
+  const stringBuilder = []
 
   Object.keys(currClassJobs).forEach(name => {
     const currLevel = currClassJobs[name]
@@ -41,12 +43,9 @@ const compareCharacter = (prev = null, current = null) => {
     }
   })
 
-  stringBuilder.push({
-    name: '-----------------------',
-    value: '\u200b',
-  })
+  field.value = colorYellow(stringBuilder.join('\n'))
 
-  return stringBuilder
+  return field
 }
 
 const compareList = (prev, current) => {
@@ -58,11 +57,18 @@ const compareList = (prev, current) => {
     const charResult = compareCharacter(prevChar, currChar)
 
     if (charResult !== null) {
-      memberList = [...memberList, ...charResult]
+      memberList.push(charResult)
     }
   })
 
   return memberList
+}
+
+const runSchedule = (onSchedule) => {
+  schedule.scheduleJob({second: 0}, function(){
+    onSchedule()
+    console.log("schedule fired")
+  })
 }
 
 // Utils
@@ -104,5 +110,6 @@ function colorRed(text) {
 module.exports = {
   compareJobLevel,
   compareCharacter,
-  compareList
+  compareList,
+  runSchedule
 }
