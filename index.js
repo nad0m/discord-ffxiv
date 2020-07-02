@@ -6,6 +6,7 @@ const { getEmbed } = require('./embed')
 const { runSchedule } = require('./util')
 
 let channelId = '712206529981579355'
+const botId = '727959928144396348'
 const prefix = '!thorn'
 
 client.login(process.env.BOT_TOKEN);
@@ -31,7 +32,12 @@ client.on("message", msg => {
   const memberJoin = msg.type === "GUILD_MEMBER_JOIN";
 
   if (memberJoin) {
-    channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
+    const id = msg.author.id
+    if (id === botId) {
+      channel.send(`Hello, I'm Thorn Bot -- the Doc's creation! I'm here to help everyone track their progress.`)
+    } else {
+      channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
+    }
   }
 
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
