@@ -37,11 +37,8 @@ const getDataFromXIV = async () => {
   let promises = await getFCMemberIds()
 
   while (!promises) {
-    console.log("retrying..")
     promises = await getFCMemberIds()
   }
-
-  console.log("success")
 
   const members = await Promise.all(promises)
   const processedMembers = members.reduce((acc, { Character: { ID, Name, ClassJobs = [] } = {} }) => {
@@ -78,16 +75,18 @@ const putDataToDB = async body => {
     }
   });
   const json = await response.json();
-  console.log(json)
 }
 
-const getStatus = async cb => {
+const getStatus = async (cb, updateDB = false) => {
   const prev = await getDataFromDB()
   const curr = await getDataFromXIV()
   const result = compareList(prev, curr)
 
   cb(result)
-  //putDataToDB(curr)
+
+  if (updateDB) {
+    putDataToDB(curr)
+  }
 }
 
 module.exports = {

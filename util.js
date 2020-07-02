@@ -67,7 +67,6 @@ const compareList = (prev, current) => {
 const runSchedule = (onSchedule) => {
   schedule.scheduleJob({second: 0}, function(){
     onSchedule()
-    console.log("schedule fired")
   })
 }
 

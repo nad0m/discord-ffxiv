@@ -18,7 +18,7 @@ client.on("ready", () => {
     onDataFinish = result => {
       channel.send({ embed: getEmbed(result) })
     }
-    getStatus(onDataFinish)
+    getStatus(onDataFinish, true)
   }
   runSchedule(onSchedule)
 })

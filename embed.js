@@ -1,4 +1,11 @@
 const getEmbed = fields => {
+  if (fields.length === 0) {
+    fields.push({
+      name: 'No progress made...',
+      value: ':('
+    })
+  }
+
   const embed = {
     color: 0x0099ff,
     title: '24-Hour Progress Report',
