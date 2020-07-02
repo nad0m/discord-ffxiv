@@ -30,6 +30,10 @@ client.on("message", msg => {
   const channel = client.channels.cache.get(msg.channel.id)
   const memberJoin = msg.type === "GUILD_MEMBER_JOIN";
 
+  if (memberJoin) {
+    channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
+  }
+
   if (!msg.content.startsWith(prefix) || msg.author.bot) return;
 
   const args = msg.content.slice(prefix.length).split(' ');
@@ -54,9 +58,5 @@ client.on("message", msg => {
 
   if (msg.content.startsWith('!thorn setChannel')) {
 
-  }
-
-  if (memberJoin) {
-    channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
   }
 })
