@@ -65,7 +65,7 @@ const compareList = (prev, current) => {
 }
 
 const runSchedule = (onSchedule) => {
-  schedule.scheduleJob({hour: 22, minute: 0}, function(){
+  schedule.scheduleJob({hour: 5, minute: 0}, function(){
     onSchedule()
   })
 }

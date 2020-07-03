@@ -62,7 +62,7 @@ client.on("message", msg => {
     getStatus(cb)
   }
 
-  if (msg.content.startsWith('!thorn setChannel')) {
-
+  if (msg.content.startsWith('!thorn currentChannel')) {
+    channel.send(`Current channel ID: ${channelId}`)
   }
 })
