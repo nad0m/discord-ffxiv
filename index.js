@@ -5,7 +5,7 @@ const client = new Discord.Client()
 const { getEmbed } = require('./embed')
 const { runSchedule } = require('./util')
 
-let channelId = '712206529981579355'
+let channelId = '726255598768881684'
 const botId = '727959928144396348'
 const prefix = '!thorn'
 
