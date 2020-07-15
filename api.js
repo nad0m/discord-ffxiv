@@ -84,7 +84,7 @@ const getStatus = async (cb, updateDB = false) => {
 
   cb(result)
 
-  if (updateDB) {
+  if (updateDB && result) {
     putDataToDB(curr)
   }
 }

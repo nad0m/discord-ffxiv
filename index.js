@@ -13,7 +13,7 @@ client.login(process.env.BOT_TOKEN);
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
-  client.user.setActivity("with Doctor Doctor", {
+  client.user.setActivity("nonya", {
     type: "PLAYING"
   });
 
