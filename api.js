@@ -1,6 +1,8 @@
 require("dotenv").config()
 const XIVAPI = require('xivapi-js')
-const xiv = new XIVAPI()
+const xiv = new XIVAPI({
+  private_key: process.env.XIV_KEY,
+})
 const server = "Midgardsormr"
 const fetch = require('node-fetch')
 const { compareList } = require('./util')
