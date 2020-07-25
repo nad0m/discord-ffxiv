@@ -7,7 +7,11 @@ const compareJobLevel = (prev = null, current = null) => {
 
   const diff = current.Level - prev.Level
 
-  return `${current.Name}: ${prev.Level} -> ${current.Level} (+${diff})`
+  return `${current.Name}: ${prettyNum(prev.Level)} -> ${prettyNum(current.Level)} (+${prettyNum(diff)})`
+}
+
+function prettyNum(x) {
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 const compareCharacter = (prev = null, current = null) => {

@@ -62,6 +62,13 @@ client.on("message", msg => {
     getStatus(cb)
   }
 
+  if (msg.content === "!thorn progress overwrite") {
+    const cb = result => {
+      channel.send({ embed: getEmbed(result) })
+    }
+    getStatus(cb, true)
+  }
+
   if (msg.content.startsWith('!thorn currentChannel')) {
     channel.send(`Current channel ID: ${channelId}`)
   }

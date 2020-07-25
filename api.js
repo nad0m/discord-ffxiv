@@ -27,12 +27,14 @@ const getMemberClassJobs = async ({ ID }) => {
 }
 
 const processClassJobs = ClassJobs => {
-  return ClassJobs.reduce((acc, { UnlockedState: { Name } = {}, Level }) => {
+  return ClassJobs.reduce((acc, { UnlockedState: { Name } = {}, Level, ExpLevel }) => {
+    const { Total_XP } = acc
     return {
       ...acc,
-      [Name]: Level
+      [Name]: Level,
+      Total_XP: parseInt(ExpLevel) + Total_XP
     }
-  }, {})
+  }, { Total_XP: 0 })
 }
 
 const getDataFromXIV = async () => {
@@ -43,7 +45,8 @@ const getDataFromXIV = async () => {
   }
 
   const members = await Promise.all(promises)
-  const processedMembers = members.reduce((acc, { Character: { ID, Name, ClassJobs = [] } = {} }) => {
+  const processedMembers = members.reduce((acc, { Character = {} }) => {
+    const { ID, Name, ClassJobs } = Character
     return {
       ...acc,
       [ID]: {
