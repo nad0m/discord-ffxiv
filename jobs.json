@@ -1,0 +1,12 @@
+{
+  "Warrior": "Marauder",
+  "Paladin": "Gladiator",
+  "Dragoon": "Lancer",
+  "Monk": "Pugilist",
+  "Ninja": "Rogue",
+  "Bard": "Archer",
+  "Black Mage": "Thaumaturge",
+  "Summoner": "Arcanist",
+  "Scholar": "Arcanist",
+  "White Mage": "Conjurer"
+}

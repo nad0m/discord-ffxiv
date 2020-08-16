@@ -1,4 +1,8 @@
 const schedule = require('node-schedule')
+const fs = require('fs')
+
+let rawJobsData = fs.readFileSync('jobs.json')
+let jobs = JSON.parse(rawJobsData)
 
 const compareJobLevel = (prev = null, current = null) => {
   if (!prev || current.Level - prev.Level === 0) {
@@ -35,9 +39,13 @@ const compareCharacter = (prev = null, current = null) => {
     }
 
     if (prevClassJobs) {
-      const prevLevel = prevClassJobs[name]
+      let key = name
+      if (typeof prevClassJobs[key] === 'undefined') {
+        key = jobs[name]
+      }
+      const prevLevel = prevClassJobs[key]
       const prev = {
-        Name: name,
+        Name: key,
         Level: prevLevel
       }
       const jobLevel = compareJobLevel(prev, current)
