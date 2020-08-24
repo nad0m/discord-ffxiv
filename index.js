@@ -4,8 +4,10 @@ const Discord = require("discord.js")
 const client = new Discord.Client()
 const { getEmbed } = require('./embed')
 const { runSchedule } = require('./util')
+const { getDataFromDB, getDataFromXIV } = require('./api')
 
 let channelId = '726255598768881684'
+let rulesChannelId = '746528564052230314'
 const botId = '727959928144396348'
 const prefix = '!thorn'
 
@@ -13,7 +15,7 @@ client.login(process.env.BOT_TOKEN);
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`)
-  client.user.setActivity("nonya", {
+  client.user.setActivity("with fire", {
     type: "PLAYING"
   });
 
@@ -36,7 +38,7 @@ client.on("message", msg => {
     if (id === botId) {
       channel.send(`Hello, I'm Thorn Bot -- the Doc's creation! I'm here to help everyone track their progress.`)
     } else {
-      channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn.`)
+      channel.send(`Hi, <@${msg.member.id}>! Welcome to Crystal Thorn. If you are a new member, we have our rules listed in the <#${rulesChannelId}> section. Please feel free to check it out when you can!`)
     }
   }
 
