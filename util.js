@@ -5,7 +5,7 @@ let rawJobsData = fs.readFileSync('jobs.json')
 let jobs = JSON.parse(rawJobsData)
 
 const compareJobLevel = (prev = null, current = null) => {
-  if (!prev || current.Level - prev.Level === 0) {
+  if (!prev || current.Level - prev.Level === 0 || !prev.Level) {
     return null
   }
 
