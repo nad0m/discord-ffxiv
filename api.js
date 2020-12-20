@@ -1,28 +1,33 @@
 require("dotenv").config()
 const XIVAPI = require('xivapi-js')
+var Bottleneck = require("bottleneck");
 const xiv = new XIVAPI({
   private_key: process.env.XIV_KEY,
 })
-const server = "Midgardsormr"
+const limiter = new Bottleneck({
+  maxConcurrent: 1,
+  minTime: 2000
+});
+const id = "9232519973597993951"
 const fetch = require('node-fetch')
 const { compareList } = require('./util')
 
 const getFCMemberIds = async () => {
   //find the FC with its name and server
   try {
-    let res = await xiv.freecompany.search('Crystal Thorn', { server })
-    let id = res.Results[0].ID
-    let fc = await xiv.freecompany.get(id, { data: 'FCM' })
-    const promises = fc.FreeCompanyMembers.map(member => getMemberClassJobs(member))
+    let fc = await xiv.freecompany.get(id, { data: 'FCM', columns: 'FreeCompanyMembers' })
+    const promises = fc.FreeCompanyMembers.map(async member => {
+      return getMemberClassJobs(member)
+    })
     return promises
-  } catch(e) {
+  } catch (e) {
     return false
   }
 }
 
 const getMemberClassJobs = async ({ ID }) => {
-  const res = await xiv.character.get(ID, { data: 'CJ' })
-  //channel.send(res.Results[0].ID)
+  const res = await limiter.schedule(() => xiv.character.get(ID, { data: 'CJ' }))
+  
   return res
 }
 
